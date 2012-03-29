@@ -18,11 +18,11 @@ public class JschExperience {
 	public static void main(String[] args) {
 		
 		JSch jsch = new JSch();
-		SSHInfo user = new SSHInfo("rm", "rm123");
+		SSHInfo user = new SSHInfo("tuxknife", "tuxknife");
 		user.promptYesNo("yes");
 		
 		try {
-			Session session = jsch.getSession(user.getUsername(), "vxl-srv-004", 22);
+			Session session = jsch.getSession(user.getUsername(), "192.168.25.25", 22);
 			session.setUserInfo(user);
 			session.connect();
 			

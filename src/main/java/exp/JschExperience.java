@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
@@ -17,16 +16,13 @@ public class JschExperience {
 
 	public static void main(String[] args) {
 		
-		JSch jsch = new JSch();
-		ConnectionData connData = new ConnectionData("tuxknife", "tuxknife", "192.168.25.25", 22);
+		SSHConnection conn = new SSHConnection("tuxknife", "tuxknife", "192.168.25.25", 22);
 		
 		try {
-			Session session = jsch.getSession(connData.getUsername(), connData.getHost(), connData.getPort());
-			session.setUserInfo(connData);
-			
+			Session session = conn.getSession();
 			LOG.info("Connecting...");
 			session.connect();
-			LOG.info("Connection with server (" + connData.getHost() + ") succesfully done");
+			LOG.info("Connection with server (" + conn.getHost() + ") succesfully done");
 			
 			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
 			BufferedReader fromServer = null;
@@ -57,7 +53,7 @@ public class JschExperience {
 	        
 			LOG.info("All commands executed successfully");
 			session.disconnect();
-			LOG.info("Connection with server (" + connData.getHost() + ") succesfully finished");
+			LOG.info("Connection with server (" + conn.getHost() + ") succesfully finished");
 		} catch (JSchException e) {
 			LOG.severe(e.getMessage());
 		} catch (IOException e) {

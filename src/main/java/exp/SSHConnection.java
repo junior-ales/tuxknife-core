@@ -1,56 +1,37 @@
 package exp;
 
-import com.jcraft.jsch.UserInfo;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 
-
-public class ConnectionData implements UserInfo {
+public class SSHConnection {
 	
+	private Session session;
 	private String username;
 	private String password;
 	private String host;
 	private int port;
 	
-
-	public ConnectionData(String username, String password, String host, int port) {
+	public SSHConnection(String username, String password, String host, int port) {
 		this.setUsername(username);
 		this.setPassword(password);
 		this.setHost(host);
 		this.setPort(port);
 	}
-
-	@Override
-	public String getPassphrase() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public Session getSession() throws JSchException {
+		if (this.session == null) {
+			this.session = new JSch().getSession(this.username, this.host, this.port);
+			this.session.setPassword(this.password);
+			this.session.setConfig("StrictHostKeyChecking", "no");
+		}
+		return this.session;
 	}
-
-	@Override
-	public boolean promptPassphrase(String arg0) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean promptPassword(String arg0) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean promptYesNo(String answer) {
-		return true;
-	}
-
-	@Override
-	public void showMessage(String arg0) {
-		// TODO Auto-generated method stub
-	}
-
+	
 	public String getUsername() {
 		return username;
 	}
 	
-	@Override
 	public String getPassword() {
 		return this.password;
 	}

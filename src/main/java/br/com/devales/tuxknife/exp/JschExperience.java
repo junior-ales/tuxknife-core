@@ -1,11 +1,14 @@
-package exp;
+package br.com.devales.tuxknife.exp;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import br.com.devales.tuxknife.model.ConnectionProfile;
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
@@ -16,10 +19,13 @@ public class JschExperience {
 
 	public static void main(String[] args) {
 		
-		SSHConnection conn = new SSHConnection("tuxknife", "tuxknife", "192.168.25.25", 22);
 		
 		try {
-			Session session = conn.getSession();
+			ConnectionProfile conn = new ConnectionProfile("tuxknife", "tuxknife", "192.168.25.25", 22);
+			Session session = new JSch().getSession(conn.getUsername(), conn.getHost(), conn.getPort());
+			session.setPassword(conn.getPassword());
+			session.setConfig("StrictHostKeyChecking", "no");
+			
 			LOG.info("Connecting...");
 			session.connect();
 			LOG.info("Connection with server (" + conn.getHost() + ") succesfully done");

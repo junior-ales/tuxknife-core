@@ -13,32 +13,47 @@ import com.jcraft.jsch.Session;
 
 public class JschExperience {
 
-	private static final Logger LOG = Logger.getLogger("JschExperience.class");
+	private static final Logger LOG = Logger.getLogger("JschExperience");
 
 	public static void main(String[] args) {
 		
 		JSch jsch = new JSch();
-		SSHInfo user = new SSHInfo("tuxknife", "tuxknife");
-		user.promptYesNo("yes");
+		ConnectionData connData = new ConnectionData("tuxknife", "tuxknife", "192.168.25.25", 22);
 		
 		try {
-			Session session = jsch.getSession(user.getUsername(), "192.168.25.25", 22);
-			session.setUserInfo(user);
+			Session session = jsch.getSession(connData.getUsername(), connData.getHost(), connData.getPort());
+			session.setUserInfo(connData);
+			
+			LOG.info("Connecting...");
 			session.connect();
+			LOG.info("Connection with server (" + connData.getHost() + ") succesfully done");
 			
-			Channel channel = session.openChannel("exec");
-			((ChannelExec)channel).setCommand("pwd");
-			channel.setInputStream(null);
-//			channel.setOutputStream(System.out);
-			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
+			BufferedReader fromServer;
+			Channel channel;
 			String line;
-			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
-			}
-			channel.disconnect();
-			session.disconnect();
+			String command;
 			
+			while (true) {
+				if ((command = toServer.readLine()).equalsIgnoreCase("OUCH")) break;
+				
+				channel = session.openChannel("exec");
+				((ChannelExec)channel).setCommand(command);
+				channel.setInputStream(null);
+				channel.setOutputStream(System.out);
+				channel.connect();
+				
+				fromServer = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+				
+				while ((line = fromServer.readLine()) != null) {
+					System.out.println(line);
+				}
+				channel.disconnect();
+			}
+	        
+			LOG.info("All commands executed successfully");
+			session.disconnect();
+			LOG.info("Connection with server (" + connData.getHost() + ") succesfully finished");
 		} catch (JSchException e) {
 			LOG.severe(e.getMessage());
 		} catch (IOException e) {

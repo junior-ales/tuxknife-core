@@ -29,13 +29,17 @@ public class JschExperience {
 			LOG.info("Connection with server (" + connData.getHost() + ") succesfully done");
 			
 			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
-			BufferedReader fromServer;
+			BufferedReader fromServer = null;
 			Channel channel;
 			String line;
 			String command;
 			
 			while (true) {
-				if ((command = toServer.readLine()).equalsIgnoreCase("OUCH")) break;
+				if ((command = toServer.readLine()).equalsIgnoreCase("OUCH")) {
+					toServer.close();
+					if (fromServer != null) fromServer.close();
+					break;
+				}
 				
 				channel = session.openChannel("exec");
 				((ChannelExec)channel).setCommand(command);

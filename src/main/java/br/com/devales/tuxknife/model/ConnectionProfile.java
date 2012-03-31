@@ -4,6 +4,7 @@ package br.com.devales.tuxknife.model;
 public class ConnectionProfile {
 	
 	private String cntpName;
+	private CommandProfile cmdp;
 	private String username;
 	private String password;
 	private String host;
@@ -14,6 +15,11 @@ public class ConnectionProfile {
 		this.host = host;
 		this.port = port;
 		this.cntpName = new StringBuffer().append(username).append("@").append(host).append(":").append(port).toString();
+		this.cmdp = new CommandProfile();
+	}
+	public ConnectionProfile(CommandProfile cmdp, String username, String host, Integer port) {
+		this(username, host, port);
+		this.cmdp = cmdp;
 	}
 	
 	public ConnectionProfile(String username, String password, String host, Integer port) {
@@ -32,6 +38,14 @@ public class ConnectionProfile {
 	
 	public void setCntpName(String cntpName) {
 		this.cntpName = cntpName;
+	}
+	
+	public CommandProfile getCmdp() {
+		return this.cmdp;
+	}
+	
+	public void setCmdp(CommandProfile cmdp) {
+		this.cmdp = cmdp;
 	}
 	
 	public String getUsername() {

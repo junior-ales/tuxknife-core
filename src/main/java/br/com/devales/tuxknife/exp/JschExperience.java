@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import br.com.devales.tuxknife.model.Command;
+import br.com.devales.tuxknife.model.CommandProfile;
+import br.com.devales.tuxknife.model.CommandType;
 import br.com.devales.tuxknife.model.ConnectionProfile;
 
 import com.jcraft.jsch.Channel;
@@ -21,30 +24,37 @@ public class JschExperience {
 		
 		
 		try {
-			ConnectionProfile conn = new ConnectionProfile("tuxknife", "tuxknife", "192.168.25.25", 22);
-			Session session = new JSch().getSession(conn.getUsername(), conn.getHost(), conn.getPort());
-			session.setPassword(conn.getPassword());
+			ConnectionProfile cntp = new ConnectionProfile("tuxknife", "tuxknife", "192.168.25.25", 22);
+			Session session = new JSch().getSession(cntp.getUsername(), cntp.getHost(), cntp.getPort());
+			session.setPassword(cntp.getPassword());
 			session.setConfig("StrictHostKeyChecking", "no");
 			
 			LOG.info("Connecting...");
 			session.connect();
-			LOG.info("Connection with server (" + conn.getHost() + ") succesfully done");
+			LOG.info("Connection with server (" + cntp.getHost() + ") succesfully done");
+			
+			Command command = new Command();
+			command.setType(CommandType.EXIT);
+			command.setValue("OUCH");
+			
+			CommandProfile cmdp = cntp.getCmdp();
+			cmdp.setCommand(command);
 			
 			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
 			BufferedReader fromServer = null;
 			Channel channel;
 			String line;
-			String command;
+			String commandValue;
 			
 			while (true) {
-				if ((command = toServer.readLine()).equalsIgnoreCase("OUCH")) {
+				if ((commandValue = toServer.readLine()).equalsIgnoreCase(cntp.getCmdp().getCommand(CommandType.EXIT).getValue())) {
 					toServer.close();
 					if (fromServer != null) fromServer.close();
 					break;
 				}
 				
 				channel = session.openChannel("exec");
-				((ChannelExec)channel).setCommand(command);
+				((ChannelExec)channel).setCommand(commandValue);
 				channel.setInputStream(null);
 				channel.setOutputStream(System.out);
 				channel.connect();
@@ -59,7 +69,7 @@ public class JschExperience {
 	        
 			LOG.info("All commands executed successfully");
 			session.disconnect();
-			LOG.info("Connection with server (" + conn.getHost() + ") succesfully finished");
+			LOG.info("Connection with server (" + cntp.getHost() + ") succesfully finished");
 		} catch (JSchException e) {
 			LOG.severe(e.getMessage());
 		} catch (IOException e) {

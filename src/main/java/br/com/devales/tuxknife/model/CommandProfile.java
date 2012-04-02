@@ -3,7 +3,6 @@ package br.com.devales.tuxknife.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CommandProfile {
 
 	private String cmdpName;
@@ -11,6 +10,11 @@ public class CommandProfile {
 	
 	public CommandProfile() {
 		this.commandDictionary = new ArrayList<Command>();
+	}
+	
+	public CommandProfile(String cmdpName, List<Command> commandDictionary) {
+		this.cmdpName = cmdpName;
+		this.commandDictionary = commandDictionary;
 	}
 
 	public Command getCommand(CommandType commandType) {
@@ -41,9 +45,5 @@ public class CommandProfile {
 	
 	public List<Command> getCommandDictionary() {
 		return this.commandDictionary;
-	}
-
-	public void setCommandDictionary(List<Command> commandDictionary) {
-		this.commandDictionary = commandDictionary;
 	}
 }

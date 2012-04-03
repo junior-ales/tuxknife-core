@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import br.com.devales.tuxknife.business.CommandTranslator;
 import br.com.devales.tuxknife.model.Command;
 import br.com.devales.tuxknife.model.CommandProfile;
 import br.com.devales.tuxknife.model.CommandType;
@@ -24,7 +25,10 @@ public class JschExperience {
 		
 		
 		try {
-			ConnectionProfile cntp = new ConnectionProfile("tuxknife", "tuxknife", "192.168.25.25", 22);
+			CommandProfile ubuntuCmdp = new CommandProfile();
+			
+			ConnectionProfile cntp = new ConnectionProfile(ubuntuCmdp, "tuxknife", "tuxknife", "192.168.25.25", 22);
+			
 			Session session = new JSch().getSession(cntp.getUsername(), cntp.getHost(), cntp.getPort());
 			session.setPassword(cntp.getPassword());
 			session.setConfig("StrictHostKeyChecking", "no");
@@ -37,8 +41,8 @@ public class JschExperience {
 			command.setType(CommandType.EXIT);
 			command.setValue("OUCH");
 			
-			CommandProfile cmdp = cntp.getCmdp();
-			cmdp.setCommand(command);
+			CommandTranslator translator = new CommandTranslator(cntp.getCmdp());
+			translator.setCommand(command);
 			
 			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
 			BufferedReader fromServer = null;
@@ -47,7 +51,7 @@ public class JschExperience {
 			String commandValue;
 			
 			while (true) {
-				if ((commandValue = toServer.readLine()).equalsIgnoreCase(cntp.getCmdp().getCommand(CommandType.EXIT).getValue())) {
+				if ((commandValue = toServer.readLine()).equalsIgnoreCase(translator.getCommand(CommandType.EXIT).getValue())) {
 					toServer.close();
 					if (fromServer != null) fromServer.close();
 					break;

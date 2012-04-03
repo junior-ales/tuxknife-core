@@ -17,19 +17,15 @@ public class ConnectionProfile {
 		this.cntpName = new StringBuffer().append(username).append("@").append(host).append(":").append(port).toString();
 		this.cmdp = new CommandProfile();
 	}
-	public ConnectionProfile(CommandProfile cmdp, String username, String host, Integer port) {
-		this(username, host, port);
-		this.cmdp = cmdp;
-	}
-	
+
 	public ConnectionProfile(String username, String password, String host, Integer port) {
 		this(username, host, port);
 		this.password = password;
 	}
-	
-	public ConnectionProfile(String cntpName, String password, String username, String host, Integer port) {
+
+	public ConnectionProfile(CommandProfile cmdp, String username, String password, String host, Integer port) {
 		this(username, password, host, port);
-		this.cntpName = cntpName;
+		this.cmdp = cmdp;
 	}
 
 	public String getCntpName() {

@@ -16,24 +16,6 @@ public class CommandProfile {
 		this.cmdpName = cmdpName;
 		this.commandDictionary = commandDictionary;
 	}
-
-	public Command getCommand(CommandType commandType) {
-		for (Command cmdAux : this.commandDictionary) {
-			if (cmdAux.getType().equals(commandType)) return cmdAux;
-		}
-		throw new IllegalArgumentException("Command not configured yet");
-	}
-	
-	public void setCommand(Command command) {
-		for (Command cmdAux : this.commandDictionary) {
-			if (cmdAux.getType().equals(command.getType())) {
-				cmdAux.setValue(command.getValue());
-				cmdAux.setParameter(command.getParameter());
-				return;
-			}
-		}
-		this.commandDictionary.add(command);
-	}
 	
 	public String getCmdpName() {
 		return cmdpName;

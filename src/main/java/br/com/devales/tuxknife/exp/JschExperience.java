@@ -23,26 +23,14 @@ public class JschExperience {
 
 	public static void main(String[] args) {
 		
-		
 		try {
-			CommandProfile ubuntuCmdp = new CommandProfile();
+			CommandTranslator translator = loadCommands();
 			
-			ConnectionProfile cntp = new ConnectionProfile(ubuntuCmdp, "tuxknife", "tuxknife", "192.168.25.25", 22);
+			ConnectionProfile cntp = new ConnectionProfile(translator.getCmdp(), "tuxknife", "tuxknife", "192.168.25.25", 22);
 			
-			Session session = new JSch().getSession(cntp.getUsername(), cntp.getHost(), cntp.getPort());
-			session.setPassword(cntp.getPassword());
-			session.setConfig("StrictHostKeyChecking", "no");
+			Session session = connect(cntp);
 			
-			LOG.info("Connecting...");
-			session.connect();
-			LOG.info("Connection with server (" + cntp.getHost() + ") succesfully done");
-			
-			Command command = new Command();
-			command.setType(CommandType.EXIT);
-			command.setValue("OUCH");
-			
-			CommandTranslator translator = new CommandTranslator(cntp.getCmdp());
-			translator.setCommand(command);
+			LOG.info("Connected using the command profile named: " + translator.getCmdp().getCmdpName());
 			
 			BufferedReader toServer = new BufferedReader(new InputStreamReader(System.in));
 			BufferedReader fromServer = null;
@@ -51,7 +39,7 @@ public class JschExperience {
 			String commandValue;
 			
 			while (true) {
-				if ((commandValue = toServer.readLine()).equalsIgnoreCase(translator.getCommand(CommandType.EXIT).getValue())) {
+				if ((commandValue = toServer.readLine()).equalsIgnoreCase(translator.getCommand(CommandType.EXIT).toString())) {
 					toServer.close();
 					if (fromServer != null) fromServer.close();
 					break;
@@ -79,5 +67,31 @@ public class JschExperience {
 		} catch (IOException e) {
 			LOG.severe(e.getMessage());
 		}
+	}
+
+	private static CommandTranslator loadCommands() {
+		CommandProfile cmdp = new CommandProfile();
+		cmdp.setCmdpName("ubuntuCommands");
+		
+		CommandTranslator translator = new CommandTranslator(cmdp);
+		
+		Command command = new Command();
+		command.setType(CommandType.EXIT);
+		command.setValue("OUCH");
+		
+		translator.setCommand(command);
+		
+		return translator;
+	}
+
+	private static Session connect(ConnectionProfile cntp) throws JSchException {
+		Session session = new JSch().getSession(cntp.getUsername(), cntp.getHost(), cntp.getPort());
+		session.setPassword(cntp.getPassword());
+		session.setConfig("StrictHostKeyChecking", "no");
+		
+		LOG.info("Connecting...");
+		session.connect();
+		LOG.info("Connection with server (" + cntp.getHost() + ") succesfully done");
+		return session;
 	}
 }

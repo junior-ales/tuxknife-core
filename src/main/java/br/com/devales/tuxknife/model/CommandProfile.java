@@ -6,15 +6,15 @@ import java.util.List;
 public class CommandProfile {
 
 	private String cmdpName;
-	private List<Command> commandDictionary;
+	private List<Command> commandList;
 	
 	public CommandProfile() {
-		this.commandDictionary = new ArrayList<Command>();
+		this.commandList = new ArrayList<Command>();
 	}
 	
-	public CommandProfile(String cmdpName, List<Command> commandDictionary) {
+	public CommandProfile(String cmdpName, List<Command> commandList) {
 		this.cmdpName = cmdpName;
-		this.commandDictionary = commandDictionary;
+		this.commandList = commandList;
 	}
 	
 	public String getCmdpName() {
@@ -25,7 +25,7 @@ public class CommandProfile {
 		this.cmdpName = cmdpName;
 	}
 	
-	public List<Command> getCommandDictionary() {
-		return this.commandDictionary;
+	public List<Command> getCommandList() {
+		return this.commandList;
 	}
 }

@@ -37,4 +37,16 @@ public class Command {
 	public void setParameter(String parameter) {
 		this.parameter = parameter;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer literalCommand = new StringBuffer(this.value);
+		
+		if (this.parameter != null && !this.parameter.isEmpty()) {
+			literalCommand.append(" ").append(this.parameter);
+		}
+		
+		return literalCommand.toString();
+	}
+
 }

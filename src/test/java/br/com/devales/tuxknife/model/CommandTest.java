@@ -1,14 +1,22 @@
 package br.com.devales.tuxknife.model;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class CommandTest {
 
+	private Command command;
+	
+	@Before
+	public void setUp() {
+		this.command = new Command();
+	}
+	
 	@Test
 	public void commandWithParamenterToStringTest() {
-		Command command = new Command();
-		command.setType(CommandType.EXIT);
+		command.setType(CommandType.SHUTDOWN);
 		command.setValue("shutdown");
 		command.setParameter("-h now");
 		
@@ -17,7 +25,6 @@ public class CommandTest {
 	
 	@Test
 	public void commandWithoutParamenterToStringTest() {
-		Command command = new Command();
 		command.setType(CommandType.PWD);
 		command.setValue("pwd");
 		

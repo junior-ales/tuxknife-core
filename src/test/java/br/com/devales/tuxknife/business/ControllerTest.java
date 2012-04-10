@@ -55,5 +55,11 @@ public class ControllerTest {
 		assertFalse(this.controller.isConnected());
 	}
 
+	@Test
+	public void commitCommand() throws JSchException {
+		this.controller.connect();
+//		String commandReturn = this.controller.commit(CommandType.PWD);
+//		assertEquals("/home/tuxknife", commandReturn);
+	}
 	
 }

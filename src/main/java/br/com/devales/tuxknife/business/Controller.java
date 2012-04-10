@@ -1,9 +1,16 @@
 package br.com.devales.tuxknife.business;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+import br.com.devales.tuxknife.model.Command;
+import br.com.devales.tuxknife.model.CommandType;
 import br.com.devales.tuxknife.model.ConnectionProfile;
 
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -12,6 +19,7 @@ public class Controller {
 
 	private final Session session;
 	private final ConnectionProfile cntp;
+	private CommandTranslator translator;
 	private static final Logger LOG = Logger.getLogger("Controller");
 
 	public Controller(final ConnectionProfile cntp) throws JSchException {
@@ -19,6 +27,7 @@ public class Controller {
 		this.session = new JSch().getSession(this.cntp.getUsername(), this.cntp.getHost(), this.cntp.getPort());
 		this.session.setPassword(this.cntp.getPassword());
 		this.session.setConfig("StrictHostKeyChecking", "no");
+		this.translator = new CommandTranslator(cntp.getCmdp());
 	}
 
 	public void connect() throws JSchException {
@@ -34,6 +43,34 @@ public class Controller {
 
 	public boolean isConnected() {
 		return this.session.isConnected();
+	}
+
+	public String commit(CommandType commandType) throws JSchException, IOException {
+		Channel channel = this.openChannel(this.translator.getCommand(commandType));
+		return this.getCommandReturn(channel);
+	}
+
+	private String getCommandReturn(Channel channel) throws IOException {
+		String aux;
+		StringBuffer buffer = new StringBuffer();
+		BufferedReader fromServer = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+		
+		while ((aux = fromServer.readLine()) != null) {
+			buffer.append(aux).append("\n");
+		}
+		channel.disconnect();
+		
+		return buffer.toString().replaceAll("\\n$","");
+	}
+
+	private Channel openChannel(Command command) throws JSchException {
+		Channel channel = session.openChannel("exec");
+		((ChannelExec)channel).setCommand(command.toString());
+		channel.setInputStream(null);
+		channel.setOutputStream(System.out);
+		channel.connect();
+		
+		return channel;
 	}
 
 }

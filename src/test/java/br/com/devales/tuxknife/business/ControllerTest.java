@@ -2,6 +2,8 @@ package br.com.devales.tuxknife.business;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +30,8 @@ public class ControllerTest {
 		final CommandProfile cmdp = new CommandProfile();
 		cmdp.setCmdpName("ubuntuCommands");
 		final CommandTranslator translator = new CommandTranslator(cmdp);
-		final Command command = new Command();
-		command.setType(CommandType.EXIT);
-		command.setValue("OUCH");
-		translator.setCommand(command);
+		translator.setCommand(new Command(CommandType.EXIT, "OUCH", null));
+		translator.setCommand(new Command(CommandType.PWD, "pwd", null));
 		return translator;
 	}
 
@@ -56,10 +56,10 @@ public class ControllerTest {
 	}
 
 	@Test
-	public void commitCommand() throws JSchException {
+	public void commitCommand() throws JSchException, IOException {
 		this.controller.connect();
-//		String commandReturn = this.controller.commit(CommandType.PWD);
-//		assertEquals("/home/tuxknife", commandReturn);
+		String commandReturn = this.controller.commit(CommandType.PWD);
+		assertEquals("/home/tuxknife", commandReturn);
 	}
 	
 }

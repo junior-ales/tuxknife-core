@@ -19,7 +19,7 @@ public class Controller {
 
 	private final Session session;
 	private final ConnectionProfile cntp;
-	private CommandTranslator translator;
+	private final CommandTranslator translator;
 	private static final Logger LOG = Logger.getLogger("Controller");
 
 	public Controller(final ConnectionProfile cntp) throws JSchException {
@@ -45,15 +45,15 @@ public class Controller {
 		return this.session.isConnected();
 	}
 
-	public String commit(CommandType commandType) throws JSchException, IOException {
-		Channel channel = this.openChannel(this.translator.getCommand(commandType));
+	public String commit(final CommandType commandType) throws JSchException, IOException {
+		final Channel channel = this.openChannel(this.translator.getCommand(commandType));
 		return this.getCommandReturn(channel);
 	}
 
-	private String getCommandReturn(Channel channel) throws IOException {
+	private String getCommandReturn(final Channel channel) throws IOException {
 		String aux;
-		StringBuffer buffer = new StringBuffer();
-		BufferedReader fromServer = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+		final StringBuffer buffer = new StringBuffer();
+		final BufferedReader fromServer = new BufferedReader(new InputStreamReader(channel.getInputStream()));
 		
 		while ((aux = fromServer.readLine()) != null) {
 			buffer.append(aux).append("\n");
@@ -63,8 +63,8 @@ public class Controller {
 		return buffer.toString().replaceAll("\\n$","");
 	}
 
-	private Channel openChannel(Command command) throws JSchException {
-		Channel channel = session.openChannel("exec");
+	private Channel openChannel(final Command command) throws JSchException {
+		final Channel channel = this.session.openChannel("exec");
 		((ChannelExec)channel).setCommand(command.toString());
 		channel.setInputStream(null);
 		channel.setOutputStream(System.out);

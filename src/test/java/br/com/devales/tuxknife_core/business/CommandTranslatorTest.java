@@ -1,4 +1,4 @@
-package br.com.devales.tuxknife.business;
+package br.com.devales.tuxknife_core.business;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import br.com.devales.tuxknife.business.CommandTranslator;
-import br.com.devales.tuxknife.model.Command;
-import br.com.devales.tuxknife.model.CommandProfile;
-import br.com.devales.tuxknife.model.CommandType;
+import br.com.devales.tuxknife_core.business.CommandTranslator;
+import br.com.devales.tuxknife_core.model.Command;
+import br.com.devales.tuxknife_core.model.CommandProfile;
+import br.com.devales.tuxknife_core.model.CommandType;
 
 public class CommandTranslatorTest {
 

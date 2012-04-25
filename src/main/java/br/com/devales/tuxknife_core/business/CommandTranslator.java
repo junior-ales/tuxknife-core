@@ -1,8 +1,8 @@
-package br.com.devales.tuxknife.business;
+package br.com.devales.tuxknife_core.business;
 
-import br.com.devales.tuxknife.model.Command;
-import br.com.devales.tuxknife.model.CommandProfile;
-import br.com.devales.tuxknife.model.CommandType;
+import br.com.devales.tuxknife_core.model.Command;
+import br.com.devales.tuxknife_core.model.CommandProfile;
+import br.com.devales.tuxknife_core.model.CommandType;
 
 public class CommandTranslator {
 	

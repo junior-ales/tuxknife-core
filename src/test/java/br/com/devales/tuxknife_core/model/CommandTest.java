@@ -1,9 +1,12 @@
-package br.com.devales.tuxknife.model;
+package br.com.devales.tuxknife_core.model;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import br.com.devales.tuxknife_core.model.Command;
+import br.com.devales.tuxknife_core.model.CommandType;
 
 public class CommandTest {
 

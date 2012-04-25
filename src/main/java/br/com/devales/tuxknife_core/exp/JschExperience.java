@@ -1,14 +1,14 @@
-package br.com.devales.tuxknife.exp;
+package br.com.devales.tuxknife_core.exp;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
-import br.com.devales.tuxknife.business.CommandTranslator;
-import br.com.devales.tuxknife.model.Command;
-import br.com.devales.tuxknife.model.CommandProfile;
-import br.com.devales.tuxknife.model.CommandType;
-import br.com.devales.tuxknife.model.ConnectionProfile;
+import br.com.devales.tuxknife_core.business.CommandTranslator;
+import br.com.devales.tuxknife_core.model.Command;
+import br.com.devales.tuxknife_core.model.CommandProfile;
+import br.com.devales.tuxknife_core.model.CommandType;
+import br.com.devales.tuxknife_core.model.ConnectionProfile;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;

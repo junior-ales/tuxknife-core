@@ -1,4 +1,4 @@
-package br.com.devales.tuxknife.model;
+package br.com.devales.tuxknife_core.model;
 
 
 public class ConnectionProfile {
